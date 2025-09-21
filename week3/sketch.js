@@ -75,6 +75,8 @@ arc(width/2,height/2*0.75,100,100,radians(30-mouseX),radians(330),PIE);
 //start and end which are provided in RADIANS format
 //youcan convert degrees to radians using the radians() function
 
-
+fill(0)  
+text(mouseX + "," + mouseY, 20, 20)
+  
 }
 
