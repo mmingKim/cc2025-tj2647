@@ -23,89 +23,87 @@ function draw() {
   rect(0,height*3/4,width);
 
   //3 square
-  fill("rgba(32, 93, 58, 1)")
-  noStroke()
-  rect(width*1/10,height*2/12,width*1/8)
+  fill("rgba(32, 93, 58, 1)");
+  noStroke();
+  rect(width*1/10,height*2/12,width*1/8);
 
-  fill("rgba(28, 88, 173, 1)")
-  noStroke()
-  rect(width*8/10,height*2/12,width*1/8)
+  fill("rgba(28, 88, 173, 1)");
+  noStroke();
+  rect(width*8/10,height*2/12,width*1/8);
 
-  fill("rgba(212, 210, 210, 1)")
-  noStroke()
-  rect(width*8/12,height*3/4-10,width*1/11)
+  fill("rgba(212, 210, 210, 1)");
+  noStroke();
+  rect(width*8/12, height*3/4 - height*0.015, width*1/11, width*1/11);
   
   //2 rect
-  fill("rgba(207, 191, 98, 1)")
-  noStroke()
-  rect(width*1/10,height*7/12,width*1/10+10,height*3/10-20)
-
-  fill("rgba(79, 73, 80, 1)")
-  noStroke()
-  rect(width*8/12+15,height*3/4,width*1/10+7,height*3/10)
+  fill("rgba(207, 191, 98, 1)");
+  noStroke();
+  rect(width*1/10,height*7/12,width*1/10 + width*0.023, height*3/10 - height*0.030);
+  fill("rgba(79, 73, 80, 1)");
+  noStroke();
+  rect(width*8/12 + width*0.034, height*3/4, width*1/10 + width*0.016, height*3/10);
   
   //two straight parallel lines 
-  stroke("rgba(60, 111, 65, 1)")
-  strokeWeight(5)
-  line(width*1/20,0,width*1/20,height*1/2+height*1/40)
-  stroke("rgba(12, 68, 10, 1)")
-  strokeWeight(5)
-  line(width*1/20+width*1/40,0,width*1/20+width*1/40,height*1/2+height*1/40)
-  
-  let linex1=width*1/20
-  
-  stroke("rgba(12, 68, 10, 1)")
-  strokeWeight(5)
-  line(linex1-5,height,linex1-5,height*1/2)
-  
-  stroke("rgba(60, 111, 65, 1)")
-  strokeWeight(5)
-  line(linex1 - 5 - width*1/40,height,linex1 - 5 - width*1/40,height*1/2);
-
-  // two slanted parallel lines
-  stroke("rgba(60, 111, 65, 1)")
-  strokeWeight(5)
-  line(width,0,width*19/20,height*1/2)
-
-
-  stroke("rgba(12, 68, 10, 1)")
-  strokeWeight(5)
-  line(width-width*1/40,0,width*19/20-width*1/40,height*1/2)
-
-  stroke("rgba(60, 111, 65, 1)")
-  strokeWeight(5)
-  line(width,height,width*19/20-width*1/40,height*1/2)
- 
-  stroke("rgba(12, 68, 10, 1)")
+  stroke("rgba(60, 111, 65, 1)");
   strokeWeight(5);
-  line(width- width*1/40,height,width*19/20-width*2/40,height*1/2)
+  line(width*1/20,0,width*1/20,height*1/2+height*1/40);
+  stroke("rgba(12, 68, 10, 1)");
+  strokeWeight(5);
+  line(width*1/20+width*1/40,0,width*1/20+width*1/40,height*1/2+height*1/40);
+  
+  let linex1=width*1/20;
+  
+  stroke("rgba(12, 68, 10, 1)");
+  strokeWeight(5);
+  line(linex1 - width*0.011, height, linex1 - width*0.011, height*1/2);  
+  stroke("rgba(60, 111, 65, 1)");
+  strokeWeight(5);
+  
+  // two slanted parallel lines
+  stroke("rgba(60, 111, 65, 1)");
+  strokeWeight(5);
+  line(width,0,width*19/20,height*1/2);
+  line(linex1 - width*0.011 - width*1/40, height, linex1 - width*0.011 - width*1/40, height*1/2);
+
+
+  stroke("rgba(12, 68, 10, 1)");
+  strokeWeight(5);
+  line(width-width*1/40,0,width*19/20-width*1/40,height*1/2);
+
+  stroke("rgba(60, 111, 65, 1)");
+  strokeWeight(5);
+  line(width,height,width*19/20-width*1/40,height*1/2);
+ 
+  stroke("rgba(12, 68, 10, 1)");
+  strokeWeight(5);
+  line(width- width*1/40,height,width*19/20-width*2/40,height*1/2);
  
   //4 cut-corner rect
-  fill("rgba(53, 78, 131, 1)")
-  noStroke()
-  beginShape()
-  vertex(width*4/6,height*1/12)
-  vertex(width*4/6,height*4/12)
-  vertex(width*5/6,height*4/12)
-  vertex(width*5/6,height*1/12+ height*0.103)
-  endShape()
+  fill("rgba(53, 78, 131, 1)");
+  noStroke();
+  beginShape();
+  vertex(width*4/6,height*1/12);
+  vertex(width*4/6,height*4/12);
+  vertex(width*5/6,height*4/12);
+  vertex(width*5/6,height*1/12+ height*0.103);
+  endShape();
 
-  fill("rgba(78, 74, 80, 1)")
-  noStroke()
-  beginShape()
-  vertex(width*9/12,height*4/12)
-  vertex(width*7/12,height*5/12)
-  vertex(width*7/12,height*7/12)
-  vertex(width*9/12,height*7/12)
-  endShape()
+  fill("rgba(78, 74, 80, 1)");
+  noStroke();
+  beginShape();
+  vertex(width*9/12,height*4/12);
+  vertex(width*7/12,height*5/12);
+  vertex(width*7/12,height*7/12);
+  vertex(width*9/12,height*7/12);
+  endShape();
   //calculated the position based on the relationship between the shapes
   
   // When I had more shapes, figuring out the positions got harder, so I searched for how to show the mouse coordinates.
-  fill(0)  
-  text(mouseX + "," + mouseY, 20, 70)
-  //Then I converted the values according to the size of the preview canvas. 
+  fill(0)  ;
+  text(mouseX + "," + mouseY, 20, 70);
+  //Then I converted the values according to the size of the preview canvas. 441×678
 
-  fill("rgba(151, 99, 155, 1)")
+  fill("rgba(151, 99, 155, 1)");
   noStroke()
   beginShape()
   vertex(width*0.889, height*0.512);  // 392,347
@@ -130,7 +128,7 @@ function draw() {
   noFill()
   beginShape();
   vertex(0, height*0.010);                       
-  quadraticVertex(width*1/3, height*1/13,width,0)
+  quadraticVertex(width*1/3, height*1/13,width,0);
   endShape();
 
   stroke("rgba(64, 96, 165, 1)");
@@ -147,24 +145,24 @@ function draw() {
   noFill()
   beginShape();
   vertex(width/2,0);
-  quadraticVertex(width/2 + width*0.159,height*1/2,width*1/2,height)
-  endShape()
+  quadraticVertex(width/2 + width*0.159,height*1/2,width*1/2,height);
+  endShape();
 
   // two triangle with curves
   stroke("rgba(200, 200, 208, 1)");
   strokeWeight(2);
   fill("rgba(198, 144, 75, 1)")
-  beginShape()
+  beginShape();
   vertex(width*0.506, height*0.047);
   vertex(width*0.175, height*0.310);
   quadraticVertex(width*0.420, height*0.413, width*0.571, height*0.556);
   quadraticVertex(width*0.576, height*0.302, width*0.506, height*0.047);
-  endShape()
+  endShape();
   
   stroke("rgba(200, 200, 208, 1)");
   strokeWeight(2);
-  fill("rgba(198, 144, 75, 1)")
-  beginShape()
+  fill("rgba(198, 144, 75, 1)");
+  beginShape();
   vertex(width*0.506, height*0.953);
   vertex(width*0.175, height*0.690);
   quadraticVertex(width*0.420, height*0.587, width*0.571, height*0.444);
@@ -177,7 +175,7 @@ function draw() {
   beginShape()
   vertex(width*0.504, height*0.502);
   quadraticVertex(width*0.551, height*0.534, width*0.569, height*0.565);
-  endShape() 
+  endShape() ;
 
 
   
@@ -189,6 +187,6 @@ function draw() {
 }
 
 //After the last tweaks, I turned the added or subtracted numbers into ratios
-
+//For the colors, I  chose complementary ones.
 
 
