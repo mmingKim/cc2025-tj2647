@@ -3,8 +3,9 @@ function setup() {
   
 }
 function windowResized(){
-  resizeCanvas(windowWidth, windowHeight);
-}
+  resizeCanvas(windowWidth, windowHeight);//Let the canvas change size with the window.
+
+}//I made the shapes layer by layer, starting with the background.
 function draw() {
   
   //background 4 rect
@@ -98,10 +99,11 @@ function draw() {
   endShape();
   //calculated the position based on the relationship between the shapes
   
-  // When I had more shapes, figuring out the positions got harder, so I searched for how to show the mouse coordinates.
+  // When I had more shapes, figuring out the positions got harder, so I searched for how to show the mouse coordinates.https://editor.p5js.org/prewiredonline/sketches/mA6XRFf-G
   fill(0)  ;
   text(mouseX + "," + mouseY, 20, 70);
   //Then I converted the values according to the size of the preview canvas. 441×678
+  //Then I can make sure their size changes with the canvas, but their relative positions stay the same.
 
   fill("rgba(151, 99, 155, 1)");
   noStroke()
