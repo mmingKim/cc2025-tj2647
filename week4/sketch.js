@@ -49,7 +49,7 @@ function draw() {
 }
 
 
-//push()
+//push(
 //everything within this push/pop block 
 //will be centered ,with 0,0 as the center point
 //for(let i=0;i<10;i++)
