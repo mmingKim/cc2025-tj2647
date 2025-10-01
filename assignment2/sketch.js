@@ -74,3 +74,4 @@ function draw() {
   }
 }
 //I want to keep the outer square fixed and use the inner square to create the hollow variation effect
+//I spent a long time organizing the logic of its changes, and I found that using let helps me see more clearly which variations I’m working with.
