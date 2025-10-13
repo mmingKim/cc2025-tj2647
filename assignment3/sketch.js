@@ -3,30 +3,30 @@
 //So when I click, the lips "exhale" the current time.
 
 //At first, I was thinking about how to make the "date" fall smoothly without overlapping each other.
-//After having an office hour with professer, I learned such a great method to show it.
+//After meeting with Professor Craig Fahner during office hours,I learned a really good method to make the time fall smoothly.
 //It took me quite some time to understand deeply, but now I’m clear about how it works!
 //This method is called a basic Matter.js setup.
 //Reference: https://editor.p5js.org/cef/sketches/WXaauWYdg
 //I first copied this link into my index file to make sure it works.
 //<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
-let World = Matter.World;
-let Bodies = Matter.Bodies;
-let Engine = Matter.Engine;
+let World = Matter.World;//The engine controls the physics world
+let Bodies = Matter.Bodies;//The world holds all the objects
+let Engine = Matter.Engine;//Bodies are the shapes that can move or fall
+//I’m setting up Matter.js — the physics engine that makes the “time” fall naturally.
 
-
-
+//These are my main variables — I’ll use them to build the physics world.
 let engine;
 let world;
 let ground;
-let boxes = [];
+let boxes = [];//this will hold all the falling time texts
 
-let t = 0;               //breathing phase
+let t = 0;               //controls the breathing rhythm
 let baseSpeed = 0.02;    //constant breathing speed
-let currentHue = 0;      //store smooth color value
+let currentHue = 0;      //for smooth color change
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);// i using HSB color mode to made it easy to change
+  createCanvas(windowWidth, windowHeight);//  using HSB color mode to made it easy to change
   colorMode(HSB, 360, 100, 100);
   noStroke();
   textAlign(CENTER, CENTER);
@@ -62,21 +62,23 @@ function draw() {
 
   //breathing lips animation like exhale and inhale
   t = t + baseSpeed;
-  let openAmount = map(sin(t), -1, 1, 10, 50); //using
+  let openAmount = map(sin(t), -1, 1, 10, 50); //using sin
 
   //lips color
-  fill(currentHue, 85, 80, 0.85); //same like background color logic
+  fill(currentHue, 85, 80, 0.85); //sames like background color logic
   push();
   translate(width / 2, height / 2);
   noStroke();
 
   //upper lip
+  //The lip uses bezier curves to create smooth shapes
   beginShape();
   vertex(-100, 0);
   bezierVertex(-60, -50, -20, -60, 0, -40);
   bezierVertex(20, -60, 60, -50, 100, 0);
   bezierVertex(60, -openAmount * 0.5, -60, -openAmount * 0.5, -100, 0);
   endShape(CLOSE);
+  //https://p5js.org/reference/p5/bezierVertex/
 
   //lower lip
   beginShape();
@@ -87,18 +89,19 @@ function draw() {
   pop();
 
   //draw falling date
+  //Each “box” is a moment I clicked — a moment that was breathed out.
   fill(0, 0, 100);
   textSize(12);
 
   for (let i = 0; i < boxes.length; i++) {
-    let b = boxes[i];
-    let pos = b.body.position; 
-    let angle = b.body.angle;
-
+    let b = boxes[i];//this is one “time moment”
+    let pos = b.body.position; //its current location
+    let angle = b.body.angle;//its rotation angle 
+//I use push() and pop() so each text moves independently.
     push()
-    translate(pos.x, pos.y);
-    rotate(angle);
-    text(b.label, 0, 0);
+    translate(pos.x, pos.y);//move to the time’s location
+    rotate(angle);//rotate it slightly to feel more dynamic
+    text(b.label, 0, 0);//draw the time itself
     pop();
   }
 }//The loop goes through each one, finds where it is and how it’s rotating,
@@ -106,14 +109,14 @@ function draw() {
 //like every breath is letting another moment drift down and stay there
 
 //when I click, release one "time" from lips
-function mousePressed() {
+function mousePressed() {//Here I get the current time. 
   let h = hour(); 
   let m = minute();
   let s = second();
 if (m < 10) m = "0" + m;
 if (h < 10) h = "0" + h;                  
 if (s < 10) s = "0" + s;
-  let nowStr = year() + " " + h + ":" + m + ":" + s;//made the date more like a date
+  let nowStr = year() + " " + h + ":" + m + ":" + s;//add 0 made the date more like a date
 
   //create a falling date
   let body = Bodies.rectangle(width / 2 + random(-30, 30), height / 2, 100, 20, {
