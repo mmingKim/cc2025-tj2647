@@ -1,149 +1,54 @@
-let sushis = [];
-let plateX, plateY;
-let plateRadius = 250;
-//I make an empty list to keep all sushi
+
+let drunks = [];// square brackets indicate i'm making
+let drunkAmount = 1000;
+//an array
+
+// an array is a variable that contains multiple variables
+// each individual variable can be accessed using an 
+// index number that is fed into the square brackets
+// like so: drunks[5] would give me the 6th drunk in the list
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  background(100,180,130);
+  x = width/2;
+  y = height/2;
   colorMode(HSB);
-  noStroke();
 
-  plateX = width / 2;
-  plateY = height / 2;
-  //Center of the plate
+  for(let i = 0;i<drunkAmount;i++){
+    let drunkD = random(10,50); // diamters from 10 to 100
+    let drunkSpeed = random(1,7); // speeds from 1 to 7
+    let drunkHue = random(0,60); // hues from 0 to 60
+    drunks[i] = new Drunk(width/2,height/2,drunkD,drunkSpeed,drunkHue);
+  }
 }
 
 function draw() {
-  background(200, 10, 92);
-
-  //Plate
-  fill(40, 10, 90);
-  ellipse(plateX, plateY, 500, 500);
-  fill(0, 0, 100, 0.2);
-  ellipse(plateX, plateY, 480, 480);
-
-  //Draw all sushi
-  for (let i = 0; i < sushis.length; i++) {
-    sushis[i].display();
+  for(let i = 0;i<drunks.length;i++){
+    drunks[i].move();
+    drunks[i].display();
   }
 }
 
-function mousePressed() {
-  let d = dist(mouseX, mouseY, plateX, plateY);
-  if (d <= plateRadius) {
-    let types = ["salmon", "tuna", "egg"];
-    let t = random(types);
-    sushis.push(new Sushi(mouseX, mouseY, t));
-  }
-}
-
-
-//Sushi Class
-class Sushi {
-  constructor(x, y, type) {
+class Drunk { // class declares a new type of object
+  constructor(x,y,diameter,speed,hue){
     this.x = x;
     this.y = y;
-    this.type = type;
-
-    //Rice grains
-    this.riceGrains = [];
-    for (let i = 0; i < 100; i++) {
-      this.riceGrains.push({
-        x: random(-40, 40),
-        y: random(-15, 15),
-        w: random(5, 8),
-        h: random(3, 4),
-        r: random(-15, 15)
-      });
-    }
+    this.diameter = diameter;
+    this.speed = speed;
+    this.hue = hue;
+    this.opacity = random(0,1); // you can also initialize variables here
   }
 
-  display() {
-    push();
-    translate(this.x, this.y);
-    rectMode(CENTER);
-    noStroke();
-
-    //Base rice
-    fill(0, 0, 100);
-    rect(0, 0, 100, 40, 17);
-
-    //Rice grains
-    for (let g of this.riceGrains) {
-      push();
-      translate(g.x, g.y);
-      rotate(radians(g.r));
-      fill(0, 0, 95);
-      ellipse(0, 0, g.w, g.h);
-      pop();
-    }
-
-    //Toppings
-    if (this.type === "salmon") {
-      this.drawSalmon();
-    } else if (this.type === "tuna") {
-      this.drawTuna();
-    } else if (this.type === "egg") {
-      this.drawTamago();
-    }
-
-    pop();
+  move(){ // you can declare functions or "methods" like this
+    this.x = this.x+random(-this.speed,this.speed);
+    this.y = this.y+random(-this.speed,this.speed);
   }
 
-  //Salmon
-  drawSalmon() {
-    fill(20, 80, 100);
-    rect(0, -15, 105, 25, 18);
-    stroke(0, 0, 100, 0.3);
-    strokeWeight(2);
-    for (let i = -40; i < 40; i += 20) {
-      line(i, -25, i + 10, -5);
-    }
-    noStroke();
-  }
-
-  //Tuna
-  drawTuna() {
-    push();
-    translate(0, -10);
-    noStroke();
-    fill(350, 70, 90);
-    rect(0, 0, 105, 30, 18);
-
-    fill(350, 50, 95, 0.5);
-    ellipse(0, -5, 100, 20);
-
-    stroke(0, 0, 100, 0.3);
-    strokeWeight(2);
-    line(-35, -4, -20, 4);
-    line(-10, -6, 10, 6);
-    line(25, -4, 40, 4);
-    noStroke();
-
-    pop();
-  }
-
-  //Tamago
-  drawTamago() {
-    fill(50, 80, 100);
-    rect(0, -15, 100, 25, 12);
-    fill(50, 70, 95);
-    rect(0, -20, 100, 5, 5);
-    fill(50, 60, 85);
-    rect(0, -10, 100, 5, 5);
-
-    //Vertical seaweed band
-    fill(120, 80, 25, 0.7);
-    rect(0, 0, 20, 45, 5);
-    fill(120, 40, 50, 0.3);
-    rect(-3, 0, 6, 43, 2);
+  display(){
+    fill(this.hue,70,100,this.opacity);
+    circle(this.x,this.y,this.diameter);
   }
 }
-
-
-
-
-
-
-
 

@@ -1,3 +1,9 @@
+//When the program starts, a plate is drawn in the center of the canvas.
+//Every time I click inside the plate, a new sushi object is created at the mouse position.
+//Each sushi has its own rice texture and topping type chosen randomly.
+//All sushis are stored in a list, so draw() can loop through them to display and move softly.
+//Using lerp(), every sushi drifts a little each frame, so it feels like floating on the plate.
+//If I click a sushi again, it is removed from the list, keeping the interaction simple.
 let sushis = [];
 let plateX, plateY;
 let plateRadius = 250;
@@ -14,7 +20,7 @@ function setup() {
 }
 
 function draw() {
-  background("rgba(220, 235, 240, 1)"); //soft color to make sushi colors pop
+  background("rgba(143, 173, 183, 1)"); 
 
   fill("rgb(180,200,190)");
   ellipse(plateX, plateY, 500, 500);
@@ -23,18 +29,33 @@ function draw() {
   //two circles make the plate look layered but simple
 
   for (let i = 0; i < sushis.length; i++) {
+    sushis[i].move(); //each sushi slowly moves using lerp()
     sushis[i].display(); //each sushi knows how to draw itself
   }
 }
 
 function mousePressed() {
-  let d = dist(mouseX, mouseY, plateX, plateY);
-  if (d <= plateRadius) {
-    //check if click is inside plate so sushi stays on it
-    let types = ["salmon", "tuna", "egg"];
-    let t = random(types);
-    sushis.push(new Sushi(mouseX, mouseY, t));
-    //make a new sushi at mouse position with a random type
+  let anyHovering = false;
+
+  //check if clicking an existing sushi to remove it
+  for (let i = 0; i < sushis.length; i++) {
+    if (sushis[i].hovering == true) {
+      sushis.splice(i, 1);////splice removes the sushi I clicked on from the list
+      anyHovering = true
+      break;
+    }
+  }
+
+  //if not removing, create a new sushi on the plate
+  if (anyHovering == false) {
+    let d = dist(mouseX, mouseY, plateX, plateY);
+    if (d <= plateRadius) {
+  //check if click is inside plate so sushi stays on it
+      let types = ["salmon", "tuna", "egg"];
+      let t = random(types);
+      sushis.push(new Sushi(mouseX, mouseY, t));
+   //make a new sushi at mouse position with a random type
+    }
   }
 }
 
@@ -45,8 +66,9 @@ class Sushi {
     this.type = type;
     //save where this sushi is and what kind it is
 
-    this.riceGrains = [];
-    //I make many small ovals once so rice looks natural and doesn’t flicker
+     this.hovering = false; //for click detection later
+     this.riceGrains = [];
+    //I make many small ovals once so rice looks natural 
     for (let i = 0; i < 100; i++) {
       this.riceGrains.push({
         x: random(-40, 40),
@@ -54,21 +76,46 @@ class Sushi {
         w: random(5, 8),
         h: random(3, 4),
         r: random(-15, 15)
-      });
+    });
     }
   }
+
+  move() {
+  //make sushi drift softly by mixing its current position with a small random move
+  let newX = this.x + random(-1.5, 1.5);
+  let newY = this.y + random(-1, 1);
+
+  //use lerp to move smoothly between current and new position
+  this.x = lerp(this.x, newX, 0.2);
+  this.y = lerp(this.y, newY, 0.2);
+}
 
   display() {
     push();
     translate(this.x, this.y);
     rectMode(CENTER);
     noStroke();
-    //I move the drawing center to the sushi position so each piece is independent
+  //I move the drawing center to the sushi position so each piece is independent
 
-    fill("rgb(255,255,255)");
+   //check if mouse is close for hover effect
+    let d = dist(mouseX, mouseY, this.x, this.y);
+    if (d < 60) {
+      this.hovering = true;
+      fill("rgb(255,255,255)");
+      stroke("rgb(255,180,200)");
+      strokeWeight(3);
+      scale(1.1); //slightly larger when hovered
+    } else {
+      this.hovering = false;
+      noStroke();
+      fill("rgb(255,255,255)");
+    }
+
+    //base rice
     rect(0, 0, 100, 40, 17);
     //rounded shape feels softer like real rice
 
+    //rice grains
     for (let g of this.riceGrains) {
       push();
       translate(g.x, g.y);
@@ -79,6 +126,7 @@ class Sushi {
       //each grain has small random offset and rotation to feel organic
     }
 
+    //toppings
     if (this.type === "salmon") {
       this.drawSalmon();
     } else if (this.type === "tuna") {
@@ -146,4 +194,5 @@ class Sushi {
     //the seaweed band goes vertically to make it feel realistic
   }
 }
+
 
