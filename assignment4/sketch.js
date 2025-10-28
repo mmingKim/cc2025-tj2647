@@ -20,7 +20,7 @@ function setup() {
 }
 
 function draw() {
-  background("rgba(143, 173, 183, 1)"); 
+  background("rgba(101, 152, 169, 1)"); 
 
   fill("rgb(180,200,190)");
   ellipse(plateX, plateY, 500, 500);
