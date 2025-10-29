@@ -8,78 +8,74 @@ const BLINK_RATE = 3; //Blink speed for every eye is identical
 
 function setup() {
   createCanvas(400, 400);
-  angleMode(DEGREES); //Rotation using degrees feels more intuitive
+  angleMode(DEGREES);
   noStroke();
 
   focusX = width / 2;
   focusY = height + 100; //A spot deep below the canvas
 
-  //Place many eyes while making sure they do not overlap
-  while (eyes.length < totalEyes) {
+  //Create eyes using only for loop
+  for (let i = 0; i < totalEyes; i++) {
     let e = {
-      x: random(20, width - 20), //Eyes appear anywhere on screen
-      y: random(20, height - 20),
-      w: random(14, 30), //Slight size variations make them feel organic
-      h: random(8, 18),
-      blinkOffset: random(1000) //Random timing so they never blink together
+      gazerX: random(20, width - 20),
+      gazerY: random(20, height - 20),
+      eyeWidth: random(14, 30),
+      eyeHeight: random(8, 18),
+      blinkOffset: random(1000)
     };
 
-    let overlap = false; //Collision check
-    for (let i = 0; i < eyes.length; i++) {
-      let other = eyes[i];
-      let d = dist(e.x, e.y, other.x, other.y);
-      if (d < (e.w + other.w) * 0.55) {
+    //Check overlap with existing eyes
+    let overlap = false;
+    for (let j = 0; j < eyes.length; j++) {
+      let other = eyes[j];
+      let d = dist(e.gazerX, e.gazerY, other.gazerX, other.gazerY);
+      if (d < (e.eyeWidth + other.eyeWidth) * 0.55) {
         overlap = true;
         break;
       }
     }
 
-    if (!overlap) eyes.push(e); //Only add it when there is space
+    if (!overlap) eyes.push(e);
   }
 }
 
 function draw() {
   background(5, 0, 10); //Dark void atmosphere
 
-  for (let e of eyes) {
+  for (let i = 0; i < eyes.length; i++) {
+    let e = eyes[i];
 
     //They blink quickly but not at the same moment
     let blink = abs(sin(frameCount * BLINK_RATE + e.blinkOffset));
-    let currentH = lerp(e.h * 0.02, e.h, blink); //Eye nearly fully closes then opens again
+    let currentH = lerp(e.eyeHeight * 0.02, e.eyeHeight, blink);
 
     //Every eye rotates to stare into the same direction
-    let ang = atan2(focusY - e.y, focusX - e.x) + 90;
+    let ang = atan2(focusY - e.gazerY, focusX - e.gazerX) + 90;
 
     push();
-    translate(e.x, e.y);
+    translate(e.gazerX, e.gazerY);
     rotate(ang);
-    drawEye(0, 0, e.w, currentH, blink);
+    drawEye(0, 0, e.eyeWidth, currentH, blink);
     pop();
   }
 }
 
-//A cat-like slit eye with a corrupted and unsettling look
-function drawEye(x, y, w, currentH, blink) {
-
-  //This black shape becomes the eyelid while blinking
+//Draw one creepy eye
+function drawEye(gazerX, gazerY, eyeWidth, currentH, blink) {
   fill(0);
-  ellipse(x, y, w * 1.3, currentH * 1.7 + (1 - blink) * w * 0.9);
+  ellipse(gazerX, gazerY, eyeWidth * 1.3, currentH * 1.7 + (1 - blink) * eyeWidth * 0.9);
 
-  if (blink < 0.28) return; //Completely closed phase hides the inner eye
+  if (blink < 0.28) return; //Eye completely closed
 
-  //Dirty white sclera
   fill(220);
-  ellipse(x, y, w, currentH);
+  ellipse(gazerX, gazerY, eyeWidth, currentH);
 
-  //Dark blood ring around the eye
   fill(150, 0, 0, 140);
-  ellipse(x, y, w * 1.05, currentH * 1.25);
+  ellipse(gazerX, gazerY, eyeWidth * 1.05, currentH * 1.25);
 
-  //Vertical red iris
   fill(255, 0, 0);
-  ellipse(x, y, w * 0.25, currentH * 1.05);
+  ellipse(gazerX, gazerY, eyeWidth * 0.25, currentH * 1.05);
 
-  //Thin crack-like pupil
   fill(0);
-  ellipse(x, y, w * 0.10, currentH * 0.90);
+  ellipse(gazerX, gazerY, eyeWidth * 0.10, currentH * 0.90);
 }
