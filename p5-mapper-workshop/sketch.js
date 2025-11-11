@@ -76,7 +76,7 @@ function drawPupuFace(pg, px, py, s) {
   pg.fill(255, 150, 70, 160);
   let eyeW = s * 0.22;
 
-  // 阴影层
+  
   pg.triangle(px - eyeW + shadowOffset, py - s * 0.15 + shadowOffset,
     px - s * 0.1 + shadowOffset, py + shadowOffset,
     px - s * 0.35 + shadowOffset, py + shadowOffset);
@@ -84,7 +84,7 @@ function drawPupuFace(pg, px, py, s) {
     px + s * 0.35 + shadowOffset, py + shadowOffset,
     px + s * 0.1 + shadowOffset, py + shadowOffset);
 
-  // 主眼睛与嘴巴
+  
   pg.fill(0);
   pg.triangle(px - eyeW, py - s * 0.15, px - s * 0.1, py, px - s * 0.35, py);
   pg.triangle(px + eyeW, py - s * 0.15, px + s * 0.35, py, px + s * 0.1, py);
