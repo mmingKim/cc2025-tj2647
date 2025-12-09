@@ -16,6 +16,8 @@ let ringSpacing = 40; // How far apart the rings are.
 let handPose;
 let video;
 let hands = []; // This array will hold the data of any hands detected by the camera.
+/// I define all global variables:
+//Spider, web nodes, hand-tracking data, and rain data.
 
 // Weather Variables
 // I added these to control the rain mechanic.
@@ -24,11 +26,12 @@ let rainDrops = []; // Stores all the active rain particles.
 let rainTimer = 0; // A timer to smooth out the transition when I move my hand away.
 
 function preload() {
-    // Load the machine learning model.
-    // I'm using "handPose" because it gives me keypoints for fingers (tips, knuckles, etc.).
+    // Load the hand tracking model.
+    // I'm using "handPose" because it gives me keypoints for fingers 
     handPose = ml5.handPose();
 }
 
+    
 function setup() {
     createCanvas(windowWidth, windowHeight);
 
@@ -47,24 +50,26 @@ function setup() {
     // Instantiate the spider in the center. All the movement and drawing logic happens inside this class.
     spider = new Spider(width / 2, height / 2);
 }
+    ///I hide the default video element and start hand detection.
+    //function I made to build the spider web structure.
+
 
 function draw() {
     // Drawing the Background
     push();
     // I translate to the width and scale by -1 to FLIP the video horizontally.
-    // This creates a "mirror" effect. Without this, moving my hand right would make the spider go left, which is super confusing.
     translate(width, 0);
     scale(-1, 1);
+    background(5, 5, 8, 60);
     image(video, 0, 0, width, height);
     pop();
 
     // I used a background with transparency here to create a "trail/afterimage" effect.
     // It makes the spider look a bit ghostly when it moves.
-    // I made it darker (opacity 230) so the web stands out against the video.
+    // I made it darker  so the web stands out against the video.
     background(5, 5, 8, 230);
 
     // Hand Logic (Control & Weather)
-    // Right now the target is the mouse, but I prepared this as a vector so I can easily swap it for hand coordinates later.
     let target = createVector(mouseX, mouseY); 
     let pinchDistance = 999;
     let rainHandDetected = false;
@@ -96,7 +101,7 @@ function draw() {
             isRaining = false;
         }
     }
-
+    
     // Control Logic
     if (controlHand) {
         // Keypoint 8 is the Index Finger Tip.
@@ -152,7 +157,9 @@ function draw() {
         if (drop.pos.y > height) {
             rainDrops.splice(i, 1);
         }
-    }
+    }///When it is raining, I keep adding new rain drops.
+    //Each one falls with gravity, and disappears when leaving the screen.
+    
 
     // Draw the Elastic Web
     drawingContext.shadowBlur = 0;
@@ -187,6 +194,10 @@ function draw() {
             if (r < webNodes.length - 1) {
                 let neighborRadial = webNodes[r + 1][s];
                 line(node.pos.x, node.pos.y, neighborRadial.pos.x, neighborRadial.pos.y);
+           ///The spider web is fully elastic.Each web node checks:
+           //If the spider jumps near it → it is pushed away
+           //If it is raining → it falls downward
+          //Otherwise  it springs back to its original position
             }
         }
     }
@@ -200,7 +211,7 @@ function draw() {
         spider.jump();
     }
 
-    spider.update(target, isRaining);
+    spider.update(target, isRaining);///At the end of each frame,I update the spider’s physics and draw its legs and glowing body.
     spider.display();
 }
 
@@ -234,7 +245,9 @@ function initWeb() {
             ringNodes.push(new WebNode(x, y));
         }
         webNodes.push(ringNodes);
-    }
+    }///The web is made of rings and spokes.
+     //I loop through angles and distance to place web nodes around the center.
+     // add a little randomness so it feels more like a natural spider web.
 }
 
 // RainDrop Class
@@ -255,6 +268,7 @@ class RainDrop {
         stroke(200, 230, 255, this.alpha);
         strokeWeight(1.5);
         line(this.pos.x, this.pos.y, this.pos.x + this.vel.x * 0.5, this.pos.y - this.len);
+        ///Each rain drop has its own position, velocity, and gravity.
     }
 }
 
@@ -280,21 +294,23 @@ class WebNode {
             this.pos.add(this.vel);
             this.acc.mult(0);
             return;
-        }
+        }///When it rains, each web node gets a small downwards acceleration.
+         //So the web becomes heavy and slowly falls down,
+
 
         // Normal Elastic Logic
         let dx = this.pos.x - sx;
         let dy = this.pos.y - sy;
         let distSq = dx * dx + dy * dy;
-        let distToHomeSq = Math.pow(this.origin.x - this.pos.x, 2) + Math.pow(this.origin.y - this.pos.y, 2);
+        let distToHomeSq = pow(this.origin.x - this.pos.x, 2) + pow(this.origin.y - this.pos.y, 2);
 
         if (distSq < rSq || distToHomeSq > 1 || !this.isSleeping) {
             this.isSleeping = false;
 
             // Repulsion Spider pushes web.
             if (distSq < rSq) {
-                let d = Math.sqrt(distSq);
-                let maxDist = Math.sqrt(rSq); 
+                let d = sqrt(distSq);
+                let maxDist = sqrt(rSq); 
                 let force = map(d, 0, maxDist, 12, 0);
                 if (d > 0) {
                     this.acc.x += (dx / d) * force;
@@ -349,7 +365,9 @@ class Spider {
         // bodyParticles are the little dots floating around the center to make it look fuzzy and glowing.
         this.bodyParticles = [];
         for (let i = 0; i < 30; i++) {
-            this.bodyParticles.push(new BodyParticle());
+            this.bodyParticles.push(new BodyParticle());///The spider has smooth movement and a fake Z-axis jump.
+//Z value changes the scale, so it looks like it jumps toward the camera.
+
         }
 
         // The legs array holds the 8 leg objects. Each one has its own ideal angle and walking state.
@@ -415,7 +433,7 @@ class Spider {
             }
         }
 
-        // Calculate the direction from the body to the target (mouse).
+        // Calculate the direction from the body to the target 
         let dir = p5.Vector.sub(target, this.pos);
         let d = dir.mag();
         dir.normalize();
@@ -439,7 +457,7 @@ class Spider {
             this.vel.mult(0.95);
         }
 
-        // Gait Control Logic (The tricky part):
+        // Gait Control 
         // I check if any legs are currently moving. If one is moving, I generally wait before moving another
         // so they don't all lift up at once and look like it's floating.
         let movingLegs = this.legs.filter(l => l.isMoving);
@@ -525,6 +543,7 @@ class Spider {
         circle(0, 0, 12);
 
         pop();
+              ///A rotating flower head to make it less scary
     }
 }
 
@@ -550,7 +569,7 @@ class Leg {
         this.stepProgress = 1; // 0 to 1
         this.stepDuration = 6; // How many frames a step takes (lower = faster).
         this.stepCounter = 0;
-    }
+    }///Each leg tries to maintain its ideal position.
 
     getDistToIdeal() {
         // Calculate where the foot SHOULD be if the spider was standing perfectly still.
@@ -560,7 +579,10 @@ class Leg {
         );
         // Return distance between current foot pos and that ideal pos.
         return p5.Vector.dist(this.currentPos, idealPos);
-    }
+    }///If the distance becomes too large,
+//the leg automatically takes a step toward its target.
+//I also lift the leg slightly to make the walk feel alive and natural.
+
 
     startStep() {
         // Trigger the moving state.
