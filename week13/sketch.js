@@ -581,7 +581,7 @@ class Leg {
         return p5.Vector.dist(this.currentPos, idealPos);
     }///If the distance becomes too large,
 //the leg automatically takes a step toward its target.
-//I also lift the leg slightly to make the walk feel alive and natural.
+//I also lift the leg slightly to make the walk feel alive 
 
 
     startStep() {
