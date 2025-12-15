@@ -1,9 +1,6 @@
-//This week I took my spider to the next level! I added a generative spider web background that reacts to the spider's movement.
-//I also finally implemented the hand gesture control I planned. Now, my right hand guides the spider (Index Finger), and if I pinch (Thumb + Index), it jumps!
-//I also added a fun "God Mode" feature if I show my left hand, I can summon rain, which makes the web heavy and the spider slip down.
-//It feels much more interactive now.
-
-
+//In the final week, I focused on refining the visual effects of the project. 
+//I tried to make more changes to the spider web, but it was a bit challenging for me at this stage. 
+//I plan to keep exploring this in the future. I also wrote a README file for this project and reflected on possible directions for further development.
 let spider;
 //I need an array to store all the points (nodes) of the web so I can animate them individually.
 let webNodes = [];
@@ -16,7 +13,6 @@ let ringSpacing = 40; //How far apart the rings are.
 let handPose;
 let video;
 let hands = []; //This array will hold the data of any hands detected by the camera.
-
 
 //Weather Variables
 //I added these to control the rain mechanic.
@@ -49,7 +45,7 @@ function setup() {
     //Instantiate the spider in the center. All the movement and drawing logic happens inside this class.
     spider = new Spider(width / 2, height / 2);
 }
-    
+   
 
 
 function draw() {
@@ -180,7 +176,7 @@ function draw() {
         let currentRing = webNodes[r];
         for (let s = 0; s < currentRing.length; s++) {
             let node = currentRing[s];
-            
+        
             //Pass the 'isRaining' flag to the node. If it's true, the node gets heavy and sags.
             node.update(sx, sy, repulsionRadiusSq, isRaining);
 
@@ -192,10 +188,7 @@ function draw() {
             if (r < webNodes.length - 1) {
                 let neighborRadial = webNodes[r + 1][s];
                 line(node.pos.x, node.pos.y, neighborRadial.pos.x, neighborRadial.pos.y);
-           ///The spider web is fully elastic.Each web node checks:
-           //If the spider jumps near it → it is pushed away
-           //If it is raining → it falls downward
-          //Otherwise  it springs back to its original position
+           
             }
         }
     }
@@ -209,7 +202,7 @@ function draw() {
         spider.jump();
     }
 
-    spider.update(target, isRaining);///At the end of each frame,I update the spider’s physics and draw its legs and glowing body.
+    spider.update(target, isRaining);
     spider.display();
 }
 
@@ -220,7 +213,7 @@ function gotHands(results) {
 function windowResized() {
     //Just making sure the canvas resizes if the window changes, so the spider doesn't get lost.
     resizeCanvas(windowWidth, windowHeight);
-    initWeb(); // Re-generate the web to fit the new size.
+    initWeb(); //Re-generate the web to fit the new size.
 }
 
 function initWeb() {
@@ -292,9 +285,8 @@ class WebNode {
             this.pos.add(this.vel);
             this.acc.mult(0);
             return;
-        }///When it rains, each web node gets a small downwards acceleration.
-         //So the web becomes heavy and slowly falls down,
-
+        }//When it rains, each web node gets a small downwards acceleration.
+         
 
         //Normal Elastic Logic
         let dx = this.pos.x - sx;
@@ -325,7 +317,7 @@ class WebNode {
 
             this.vel.x += this.acc.x;
             this.vel.y += this.acc.y;
-            this.vel.x *= 0.85; //Friction
+            this.vel.x *= 0.85; // Friction
             this.vel.y *= 0.85;
             this.pos.x += this.vel.x;
             this.pos.y += this.vel.y;
@@ -399,7 +391,7 @@ class Spider {
         //Scenario A Rain Physics (Falling)
         //If it rains, the spider slips down the screen.
         if (isRaining) {
-            this.acc.y += 0.5; //Gravity
+            this.acc.y += 0.5; // Gravity
             this.vel.add(this.acc);
             this.pos.add(this.vel);
             this.acc.mult(0);
@@ -464,7 +456,7 @@ class Spider {
         if (movingLegs.length === 0 && !this.isJumping) {
             //Find the leg that is most "uncomfortable" (furthest from its ideal spot).
             let bestLeg = null;
-            let maxDist = 25; // Threshold for when a leg needs to step.
+            let maxDist = 25; //Threshold for when a leg needs to step.
 
             for (let leg of this.legs) {
                 let dist = leg.getDistToIdeal();
@@ -567,7 +559,7 @@ class Leg {
         this.stepProgress = 1; //0 to 1
         this.stepDuration = 6; //How many frames a step takes (lower = faster).
         this.stepCounter = 0;
-    }
+    }///Each leg tries to maintain its ideal position.
 
     getDistToIdeal() {
         //Calculate where the foot SHOULD be if the spider was standing perfectly still.
@@ -577,7 +569,9 @@ class Leg {
         );
         //Return distance between current foot pos and that ideal pos.
         return p5.Vector.dist(this.currentPos, idealPos);
-    }
+    }///If the distance becomes too large,
+//the leg automatically takes a step toward its target.
+//I also lift the leg slightly to make the walk feel alive 
 
 
     startStep() {
@@ -655,7 +649,7 @@ class Leg {
         //To make it look like a leg, I find the midpoint and push it outwards.
         let midPoint = p5.Vector.lerp(root, this.currentPos, 0.5);
         let legVector = p5.Vector.sub(this.currentPos, root);
-        // Get perpendicular vector for the bend direction.
+        //Get perpendicular vector for the bend direction.
         let bendDir = legVector.copy().rotate(PI / 2).normalize();
 
         //Flip bend direction based on which side of the body the leg is on.
